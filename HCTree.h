@@ -30,11 +30,12 @@ class HCTree {
 private:
     HCNode* root;
     vector<HCNode*> leaves;
-
+    int numOfBit;
 public:
     // explicit keyword is used to avoid accidental implicit conversions
     explicit HCTree() : root(0) {
         leaves = vector<HCNode*>(256, (HCNode*) 0);
+        numOfBit = 0;
     }
 
     ~HCTree();
@@ -52,7 +53,7 @@ public:
      *  PRECONDITION: build() has been called, to create the coding
      *  tree, and initialize root pointer and leaves vector.
      */
-    //void encode(byte symbol, BitOutputStream& out) const;
+    void encode(byte symbol, BitOutputStream& out) const;
 
     /** Write to the given ofstream
      *  the sequence of bits (as ASCII) coding the given symbol.
@@ -68,7 +69,7 @@ public:
      *  PRECONDITION: build() has been called, to create the coding
      *  tree, and initialize root pointer and leaves vector.
      */
-    //int decode(BitInputStream& in) const;
+    int decode(BitInputStream& in) const;
 
     /** Return the symbol coded in the next sequence of bits (represented as 
      *  ASCII text) from the ifstream.
@@ -80,6 +81,13 @@ public:
     int decode(ifstream& in) const;
     bool isItLeaf(HCNode* leafPtr) const;
     void deleteAll(HCNode* deletePtr);
+    void sendToTheFile(HCNode* nodePtr, BitOutputStream& out) const;
+    void sendSymbolToTheFile(HCNode* nodePtr, ostream& out) const;
+    HCNode* getRoot() const;
+    int getNumOfBit() const;
+    void writeSymbol(HCNode* nodePtr, istream& ins);
+    void build(int numOfBits, BitInputStream& ins);
+    void treeTest(HCNode* nodePtr) const;
 };
 
 #endif // HCTREE_H

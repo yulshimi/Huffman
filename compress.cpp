@@ -1,3 +1,4 @@
+#include "BitOutputStream.h"
 #include "HCTree.h"
 #include "HCNode.h"
 #include <iostream>
@@ -6,6 +7,8 @@
 using namespace std;
 int main(int argc, char* argv[])
 {
+  int totalBytes = 0;
+  int currentBytes = 0;
   if(argc != 3)
   {
     return 0;
@@ -18,13 +21,13 @@ int main(int argc, char* argv[])
   }
   ifstream in_stream;
   ofstream out_stream;
-  in_stream.open(argv[1]);
+  in_stream.open(argv[1], ios_base::binary);
   if(in_stream.fail())
   {
     cout << "File open fail......" << endl;
     return 0;
   }
-  char myChar;
+  unsigned char myChar;
   if(!(in_stream.peek() == ifstream::traits_type::eof()))
   {
     while(1)
@@ -34,28 +37,38 @@ int main(int argc, char* argv[])
       {
         break;
       }
+      ++totalBytes;
       ++freqVector[(unsigned int)myChar];
     }
   }
+  unsigned char finalBuf = 0;
   myTree.build(freqVector);
   in_stream.close();
-  in_stream.open(argv[1]);
+
+  in_stream.open(argv[1], ios_base::binary);
   out_stream.open(argv[2]);
-  for(int i=0; i < 256; ++i)
-  {
-    out_stream << freqVector[i] << endl;
-  }
+  BitOutputStream bitOut(out_stream);
+  int totalBits;
+  totalBits = myTree.getNumOfBit();
+  out_stream << totalBytes << endl;
+  out_stream << totalBits << endl;
+  HCNode* rootPtr = myTree.getRoot();
+  myTree.sendToTheFile(rootPtr, bitOut);
+  bitOut.flush();
+  myTree.sendSymbolToTheFile(rootPtr, out_stream);
   if(!(in_stream.peek() == ifstream::traits_type::eof()))
   {
-    while(1)
+    while(currentBytes != totalBytes)
     {
       myChar = (unsigned char)in_stream.get();
       if(in_stream.eof())
       {
         break;
       }
-      myTree.encode(myChar, out_stream);
+      myTree.encode(myChar, bitOut);
+      ++currentBytes; 
     }
+    bitOut.flush();
   }
   in_stream.close();
   out_stream.close();  

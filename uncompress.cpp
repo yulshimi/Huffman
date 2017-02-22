@@ -12,30 +12,31 @@ int main(int argc, char* argv[])
   {
     return 0;
   }
-  char myChar;
-  string number;
-  int m_int;
-  vector<int> freqVector;
+  unsigned char myChar;
+  int totalBits;
+  int totalBytes= 0;
+  int currentBytes = 0;
   ifstream in_stream;
   ofstream out_stream;
-  in_stream.open(argv[1]);
+  in_stream.open(argv[1], ios_base::binary);
   out_stream.open(argv[2]);
-  for(int i=0; i < 256; ++i)
-  {
-    getline(in_stream, number);
-    m_int = atoi(number.c_str());
-    freqVector.push_back(m_int);
-  } 
+  BitInputStream bitIn(in_stream);
+  in_stream >> totalBytes;
+  in_stream >> totalBits;
+  char g_char = in_stream.get();
   HCTree myTree;
-  myTree.build(freqVector);
-  while(!in_stream.eof())
+  myTree.build(totalBits, bitIn);
+  myTree.writeSymbol(myTree.getRoot(), in_stream);
+  bitIn.fill();
+  while(totalBytes != currentBytes)
   {
-    myChar = (unsigned char)myTree.decode(in_stream);
+    myChar = (unsigned char)myTree.decode(bitIn);
     if(myChar == 0)
     {
       break;
     }
-    out_stream << myChar;    
+    out_stream << myChar;
+    ++currentBytes;    
   }
   in_stream.close();
   out_stream.close();
