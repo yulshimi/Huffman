@@ -1,3 +1,8 @@
+//Name: Phillip Jo, San Kang
+//Date: 02/22/2017/Wed
+//Overview: This is the implementation of "BitOutputStream.h"
+//Assignment#: PA3
+
 #include "BitOutputStream.h"
 BitOutputStream::BitOutputStream(ostream& os) : out(os), buf(0), nbits(0)
 {

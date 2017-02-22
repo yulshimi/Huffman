@@ -1,3 +1,8 @@
+//Name: Phillip Jo, San Kang
+//Date: 02/22/2017/Wed
+//Overview: This program is the implementation of "BitInputStream.h"
+//Assignment#: PA3
+
 #include "BitInputStream.h"
 BitInputStream::BitInputStream(istream& is) : in(is)
 {

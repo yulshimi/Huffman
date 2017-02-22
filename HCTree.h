@@ -1,3 +1,8 @@
+//Name: Phillip Jo, San Kang
+//Date: 02/22/2017/Wed
+//Overview: This is the header file of "HCTree.cpp"
+//Assignment#: PA3
+
 #ifndef HCTREE_H
 #define HCTREE_H
 #include <stack>

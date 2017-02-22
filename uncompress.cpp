@@ -1,3 +1,8 @@
+//Name: Phillip Jo, San Kang
+//Date: 02/22/2017/Wed
+//Overview: This is to uncompress a file using bitwise I/O
+//Assignment#: PA3
+
 #include "HCTree.h"
 #include "HCNode.h"
 #include <iostream>
@@ -22,6 +27,10 @@ int main(int argc, char* argv[])
   out_stream.open(argv[2]);
   BitInputStream bitIn(in_stream);
   in_stream >> totalBytes;
+  if(totalBytes == 0)
+  {
+    return 0;
+  }
   in_stream >> totalBits;
   char g_char = in_stream.get();
   HCTree myTree;

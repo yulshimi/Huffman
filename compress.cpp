@@ -1,3 +1,8 @@
+//Name: Phillip Jo, San Kang
+//Date: 02/22/2017/Wed
+//Overview: This is to compress a file using bitwise I/O
+//Assignment: PA3
+
 #include "BitOutputStream.h"
 #include "HCTree.h"
 #include "HCNode.h"
@@ -7,6 +12,7 @@
 using namespace std;
 int main(int argc, char* argv[])
 {
+  int totalBits = 0;
   int totalBytes = 0;
   int currentBytes = 0;
   if(argc != 3)
@@ -28,27 +34,28 @@ int main(int argc, char* argv[])
     return 0;
   }
   unsigned char myChar;
-  if(!(in_stream.peek() == ifstream::traits_type::eof()))
+  if((in_stream.peek() == ifstream::traits_type::eof()))
   {
-    while(1)
-    {
-      myChar = (unsigned char)in_stream.get();
-      if(in_stream.eof())
-      {
-        break;
-      }
-      ++totalBytes;
-      ++freqVector[(unsigned int)myChar];
-    }
+    out_stream.open(argv[2]);
+    out_stream << totalBytes << endl;
+    out_stream << totalBits << endl;
+    return 0;
   }
-  unsigned char finalBuf = 0;
+  while(1)
+  {
+    myChar = (unsigned char)in_stream.get();
+    if(in_stream.eof())
+    {
+      break;
+    }
+    ++totalBytes;
+    ++freqVector[(unsigned int)myChar];
+  }
   myTree.build(freqVector);
   in_stream.close();
-
   in_stream.open(argv[1], ios_base::binary);
   out_stream.open(argv[2]);
   BitOutputStream bitOut(out_stream);
-  int totalBits;
   totalBits = myTree.getNumOfBit();
   out_stream << totalBytes << endl;
   out_stream << totalBits << endl;
@@ -56,20 +63,17 @@ int main(int argc, char* argv[])
   myTree.sendToTheFile(rootPtr, bitOut);
   bitOut.flush();
   myTree.sendSymbolToTheFile(rootPtr, out_stream);
-  if(!(in_stream.peek() == ifstream::traits_type::eof()))
+  while(currentBytes != totalBytes)
   {
-    while(currentBytes != totalBytes)
+    myChar = (unsigned char)in_stream.get();
+    if(in_stream.eof())
     {
-      myChar = (unsigned char)in_stream.get();
-      if(in_stream.eof())
-      {
-        break;
-      }
-      myTree.encode(myChar, bitOut);
-      ++currentBytes; 
+      break;
     }
-    bitOut.flush();
+    myTree.encode(myChar, bitOut);
+    ++currentBytes; 
   }
+  bitOut.flush();
   in_stream.close();
   out_stream.close();  
   return 0;

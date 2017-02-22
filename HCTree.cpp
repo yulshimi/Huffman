@@ -1,8 +1,14 @@
+//Name: Phillip Jo, San Kang
+//Date: 02/22/2017/Wed
+//Overview: This is the implementation of "HCTree.h". Some new functions are added.
+//Assignment#: PA3
+
 #include "HCTree.h"
 #include <vector>
 #include <queue>
 using namespace std;
 
+//This function builds Huffman Coding Tree based on a vector
 void HCTree::build(const vector<int>& freqs)
 {
   buildLeaves(freqs);
@@ -49,6 +55,9 @@ void HCTree::build(const vector<int>& freqs)
   }    
 }
 
+//This function is called in "uncompress.cpp"
+//This function builds Huffman Coding Tree based on a header in an encoded file
+//Huffman Coding Tree is built without frequencies
 void HCTree::build(int numOfBits, BitInputStream& ins)
 {
   HCNode* nodePtr = new HCNode();
@@ -82,6 +91,7 @@ int HCTree::getNumOfBit() const
   return numOfBit;
 }
 
+//This function builds leaves based on a vector
 void HCTree::buildLeaves(const vector<int>& freqs)
 {
   for(int i=0; i < freqs.size(); ++i)
@@ -218,6 +228,7 @@ int HCTree::decode(BitInputStream& in) const
   return (int)searchPtr->symbol;
 }
 
+//This function sends a structure of Huffman Coding Tree to an encoded file
 void HCTree::sendToTheFile(HCNode* nodePtr, BitOutputStream& out) const
 {
   if(nodePtr->c0 != nullptr)
@@ -233,6 +244,8 @@ void HCTree::sendToTheFile(HCNode* nodePtr, BitOutputStream& out) const
   }
 }
 
+//This function is to test whether Huffman Coding Tree is correctly constructed or not
+//in "uncompress.cpp". This was used for debugging.
 void HCTree::treeTest(HCNode* nodePtr) const
 {
   if(nodePtr->c0 != nullptr)
@@ -249,6 +262,7 @@ void HCTree::treeTest(HCNode* nodePtr) const
   cout << nodePtr->symbol;
 }
 
+//This function writes values of symbols in leaves in a header in an encoded file
 void HCTree::sendSymbolToTheFile(HCNode* nodePtr, ostream& out) const
 {
   if(nodePtr != nullptr)
@@ -262,6 +276,8 @@ void HCTree::sendSymbolToTheFile(HCNode* nodePtr, ostream& out) const
   }
 }
 
+//This function assigns appropriate symbols to leaves of Huffman Coding Tree
+//It is used to rebuild Huffman Coding Tree
 void HCTree::writeSymbol(HCNode* nodePtr, istream& ins)
 {
   if(nodePtr != nullptr)

@@ -1,3 +1,8 @@
+//Name: Phillip Jo, San Kang
+//Date: 02/22/2017/Wed
+//Overview: This is the header file of "HCNode.cpp"
+//Assignment#: PA3
+
 #ifndef HCNODE_H
 #define HCNODE_H
 
