@@ -204,13 +204,10 @@ HCNode* HCTree::getRoot() const
 int HCTree::decode(BitInputStream& in) const
 {
   HCNode* searchPtr = root;
-  if(searchPtr == nullptr)
-  {
-    return 0;
-  }
   int myInt;
   while(!isItLeaf(searchPtr))
   {
+    cout << "While";
     myInt = in.readBit();
     if(myInt == 0)
     {
@@ -250,16 +247,16 @@ void HCTree::treeTest(HCNode* nodePtr) const
 {
   if(nodePtr->c0 != nullptr)
   {
-    cout << "0";
+    cout << "0" << endl;
     treeTest(nodePtr->c0);
   }
   
   if(nodePtr->c1 != nullptr)
   {
-    cout << "1";
+    cout << "1" << endl;
     treeTest(nodePtr->c1);
   }
-  cout << nodePtr->symbol;
+  cout << "symbol: " << (int)nodePtr->symbol << endl;
 }
 
 //This function writes values of symbols in leaves in a header in an encoded file

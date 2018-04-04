@@ -52,9 +52,10 @@ int main(int argc, char* argv[])
     ++freqVector[(unsigned int)myChar];
   }
   myTree.build(freqVector);
+  myTree.treeTest(myTree.getRoot());
   in_stream.close();
   in_stream.open(argv[1], ios_base::binary);
-  out_stream.open(argv[2]);
+  out_stream.open(argv[2], ios_base::binary);
   BitOutputStream bitOut(out_stream);
   totalBits = myTree.getNumOfBit();
   out_stream << totalBytes << endl;

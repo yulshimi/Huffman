@@ -23,8 +23,8 @@ int main(int argc, char* argv[])
   int currentBytes = 0;
   ifstream in_stream;
   ofstream out_stream;
-  in_stream.open(argv[1], ios_base::binary);
-  out_stream.open(argv[2]);
+  in_stream.open(argv[1], ios::binary);
+  out_stream.open(argv[2], ios::binary);
   BitInputStream bitIn(in_stream);
   in_stream >> totalBytes;
   if(totalBytes == 0)
@@ -36,15 +36,12 @@ int main(int argc, char* argv[])
   HCTree myTree;
   myTree.build(totalBits, bitIn);
   myTree.writeSymbol(myTree.getRoot(), in_stream);
+  myTree.treeTest(myTree.getRoot());
   bitIn.fill();
   while(totalBytes != currentBytes)
   {
     myChar = (unsigned char)myTree.decode(bitIn);
-    if(myChar == 0)
-    {
-      break;
-    }
-    out_stream << myChar;
+    out_stream.put(myChar);
     ++currentBytes;    
   }
   in_stream.close();
